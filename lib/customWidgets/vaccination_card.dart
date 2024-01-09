@@ -20,6 +20,7 @@ class _VaccinationCardState extends State<VaccinationCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.blue,
       elevation: 5.h,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 20.w),
@@ -30,21 +31,22 @@ class _VaccinationCardState extends State<VaccinationCard> {
               widget.question,
               style: GoogleFonts.poppins(
                 textStyle: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize: 24.sp,
                   color: Colors.white,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-            SizedBox(height: 6.h),
             for (var entry in widget.choices.entries)
               if (!entry.value)
                 CheckboxListTile(
+                  visualDensity: VisualDensity.compact,
+                  dense: true,
                   title: Text(
                       entry.key,
                     style: GoogleFonts.poppins(
                       textStyle: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 20.sp,
                         color: Colors.white,
                         fontWeight: FontWeight.w400,
                       ),

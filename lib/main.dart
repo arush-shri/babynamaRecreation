@@ -1,4 +1,6 @@
+import 'package:babynama/file_handler.dart';
 import 'package:babynama/qna_page.dart';
+import 'package:babynama/vaccine_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -6,7 +8,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'customWidgets/dashboard_card.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -17,14 +24,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  late FileHandler fileHandler;
+  late List<Map<String, dynamic>> vaccineData;
+
+  @override
+  void initState() {
+    fileHandler = FileHandler();
+    getVaccineData();
+    super.initState();
+  }
+
+  void getVaccineData() async {
+    vaccineData = await fileHandler.readFile();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(450, 800),
       builder: (context, child) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: Scaffold(
+        return Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(40.h),
@@ -128,7 +148,7 @@ class _MyAppState extends State<MyApp> {
                       title: 'Question and Answer',
                       imageString: 'images/qna.png',
                       onPressed: () {
-                        Navigator.push(context, 
+                        Navigator.push(context,
                           MaterialPageRoute(builder: (context) => const AskQuestionsPage())
                         );
                       },
@@ -175,7 +195,12 @@ class _MyAppState extends State<MyApp> {
                       title: 'Track Vaccination',
                       imageString: 'images/injection.png',
                       onPressed: () {
-                        // Add logic for Track Vaccination
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VaccinePage(vaccineData: vaccineData),
+                          ),
+                        );
                       },
                       cardColor: Colors.blueAccent,
                     ),
@@ -192,8 +217,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             ),
-          ),
-        );
+          );
       },
     );
   }
