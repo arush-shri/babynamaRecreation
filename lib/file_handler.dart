@@ -4,8 +4,6 @@ import 'package:path_provider/path_provider.dart';
 
 class FileHandler{
 
-  late File file;
-
   FileHandler(){
     createFile();
   }
@@ -21,7 +19,7 @@ class FileHandler{
   }
 
   Future<void> createFile() async {
-    file = await _localFile;
+    File file = await _localFile;
 
     if (!await file.exists()) {
       List<Map<String, dynamic>> questionsChoices = [
@@ -149,7 +147,7 @@ class FileHandler{
 
   Future<List<Map<String, dynamic>>> readFile() async {
     try {
-      file = await _localFile;
+      File file = await _localFile;
       if (await file.exists()) {
         String contents = await file.readAsString();
         List<dynamic> jsonData = jsonDecode(contents);
@@ -165,6 +163,8 @@ class FileHandler{
   }
 
   Future<void> storeFile(List<Map<String, dynamic>> vaccineData) async {
+    File file = await _localFile;
+    print(vaccineData);
     await file.writeAsString(jsonEncode(vaccineData), mode: FileMode.write);
   }
 }
