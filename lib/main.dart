@@ -1,3 +1,4 @@
+import 'package:babynama/consult_page.dart';
 import 'package:babynama/file_handler.dart';
 import 'package:babynama/qna_page.dart';
 import 'package:babynama/vaccine_page.dart';
@@ -159,7 +160,11 @@ class _MyAppState extends State<MyApp> {
                       title: 'Consult a Doctor',
                       imageString: 'images/doc.png',
                       onPressed: () {
-                        // Add logic for Consult a Doctor
+                        Navigator.push(
+                          context, MaterialPageRoute(
+                            builder: (context) => const ConsultPage()
+                          )
+                        );
                       },
                       cardColor: Colors.blueAccent,
                     ),
