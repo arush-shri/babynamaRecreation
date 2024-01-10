@@ -105,7 +105,6 @@ class _AskQuestionsPageState extends State<AskQuestionsPage> {
                     });
                   },
                   children: [
-                    // Page 1 content
                     Center(
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 18.w),

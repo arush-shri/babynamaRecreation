@@ -1,3 +1,4 @@
+import 'package:babynama/autism_test_page.dart';
 import 'package:babynama/consult_page.dart';
 import 'package:babynama/file_handler.dart';
 import 'package:babynama/qna_page.dart';
@@ -214,7 +215,9 @@ class _MyAppState extends State<MyApp> {
                       title: 'Autism Detection',
                       imageString: 'images/autism.png',
                       onPressed: () {
-                        // Add logic for Autism Detection
+                        Navigator.push(context, 
+                          MaterialPageRoute(builder: (context) => const AutismTestPage())
+                        );
                       },
                       cardColor: Colors.blueAccent,
                     ),
