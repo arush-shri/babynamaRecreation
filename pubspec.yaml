@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^6.1.0
   flutter_screenutil: ^5.9.0
   path_provider: ^2.1.2
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

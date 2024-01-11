@@ -2,6 +2,7 @@ import 'package:babynama/file_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class VaccinePage extends StatefulWidget {
   final List<Map<String, dynamic>> vaccineData;
@@ -60,7 +61,27 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
       DateTime nextWeek = DateTime.now().add(const Duration(days: 7));
       return newDate.isBefore(nextWeek) && newDate.isAfter(DateTime.now());
     }
-    return true;
+    return false;
+  }
+
+  String dueDate(String fullDuration){
+    List <String> durationList = fullDuration.split(':');
+    double duration = double.parse(durationList[1].substring(0, durationList[1].length - 1));
+    String durationType = durationList[1][durationList[1].length-1];
+
+    if(durationType == "w"){
+      DateTime newDate = DOB.add(Duration(days: duration.toInt()*7));
+      return DateFormat('dd/MM/yy').format(newDate) ;
+    }
+    if(durationType == "m"){
+      DateTime newDate = DOB.add(Duration(days: duration.toInt()*30));
+      return DateFormat('dd/MM/yy').format(newDate) ;
+    }
+    if(durationType == "y"){
+      DateTime newDate = DOB.add(Duration(days: duration.toInt()*365));
+      return DateFormat('dd/MM/yy').format(newDate) ;
+    }
+    return DateFormat('dd/MM/yy').format(DateTime.now()) ;
   }
 
   void loadMapData(){
@@ -331,15 +352,29 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
               CheckboxListTile(
                 visualDensity: VisualDensity.compact,
                 dense: true,
-                title: Text(
-                  entry.key,
-                  style: GoogleFonts.poppins(
-                    textStyle: TextStyle(
-                      fontSize: 20.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
+                title: Row(
+                  children: [
+                    Text(
+                      entry.key,
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          fontSize: 20.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                     ),
-                  ),
+                    doseDue=="U"? Text(
+                      " (${dueDate(entry.key)})",
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          fontSize: 18.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ) : const SizedBox(),
+                  ],
                 ),
                 value: entry.value,
                 onChanged: (value) {

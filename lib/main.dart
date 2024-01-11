@@ -1,6 +1,7 @@
 import 'package:babynama/autism_test_page.dart';
 import 'package:babynama/consult_page.dart';
 import 'package:babynama/file_handler.dart';
+import 'package:babynama/growth_page.dart';
 import 'package:babynama/qna_page.dart';
 import 'package:babynama/vaccine_page.dart';
 import 'package:flutter/material.dart';
@@ -192,7 +193,12 @@ class _MyAppState extends State<MyApp> {
                       title: 'Track Growth',
                       imageString: 'images/growth.png',
                       onPressed: () {
-                        // Add logic for Track Growth
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TrackGrowthPage(),
+                          ),
+                        );
                       },
                       cardColor: Colors.blueAccent,
                     ),

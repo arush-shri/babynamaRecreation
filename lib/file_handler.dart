@@ -18,6 +18,11 @@ class FileHandler{
     return File('$path/childDetail.json');
   }
 
+  Future<File> get _localFileGrowth async {
+    final path = await _localPath;
+    return File('$path/childGrowthTTT.json');
+  }
+
   Future<void> createFile() async {
     File file = await _localFile;
 
@@ -164,7 +169,39 @@ class FileHandler{
 
   Future<void> storeFile(List<Map<String, dynamic>> vaccineData) async {
     File file = await _localFile;
-    print(vaccineData);
     await file.writeAsString(jsonEncode(vaccineData), mode: FileMode.write);
+  }
+
+  Future<void> storeGrowthFile(String date, String height, String weight) async {
+    File file = await _localFileGrowth;
+    final data = {
+      "date" : date,
+      "height" : height,
+      "weight" : weight
+    };
+    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    print(data);
+    await file.writeAsString(jsonEncode(data), mode: FileMode.append);
+  }
+
+  Future<List<Map<String, dynamic>>> getGrowthData() async {
+    File file = await _localFileGrowth;
+    if(await file.exists()){
+      final jsonData = await file.readAsString();
+      List<dynamic> data = [];
+      List<String> jsonObjects = jsonData.split("}{");
+      for (String historyData in jsonObjects){
+        if(historyData[0] != '{'){
+          historyData = "{$historyData";
+        }
+        if(historyData[historyData.length-1] != '}'){
+          historyData = "$historyData}";
+        }
+        Map<String, dynamic> decodedData = json.decode(historyData);
+        data.add(decodedData);
+      }
+      return data.cast<Map<String, dynamic>>().toList();
+    }
+    return [];
   }
 }
