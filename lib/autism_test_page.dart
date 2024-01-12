@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,8 +11,8 @@ class AutismTestPage extends StatefulWidget {
 
 class _AutismTestPageState extends State<AutismTestPage> {
 
-  List<bool> answers = [true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true,  true];
-  List<String> autismQuestions = [
+  final List<bool> _answers = [true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true,  true];
+  final List<String> _autismQuestions = [
     "If you point at something across the room, does your child look at it? (For example, if you point at a toy or an animal, does your child look at the toy or animal?)",
     "Have you ever wondered if your child might be deaf? (For example, if your child does not respond to sounds or their name being called)",
     "Does your child play pretend or make-believe? (For example, pretend to drink from an empty cup, pretend to talk on a phone, or pretend to feed a doll or stuffed animal)",
@@ -37,9 +35,9 @@ class _AutismTestPageState extends State<AutismTestPage> {
     "Does your child like movement activities? (For example, being swung or bounced on your knee)",
   ];
 
-  double autismPercent = 0.0;
-  int index = 0;
-  PageController pageController = PageController();
+  double _autismPercent = 0.0;
+  int _index = 0;
+  final PageController _pageController = PageController();
   bool _showResult = false;
   bool _showWelcomePage = true;
 
@@ -54,11 +52,11 @@ class _AutismTestPageState extends State<AutismTestPage> {
             child:  _showWelcomePage? _welcomePage() : _showResult? _showResultScreen() : Stack(
               children: [
                 PageView.builder(
-                  controller: pageController,
-                  itemCount: autismQuestions.length,
+                  controller: _pageController,
+                  itemCount: _autismQuestions.length,
                   onPageChanged: (int page) {
                     setState(() {
-                      index = page;
+                      _index = page;
                     });
                   },
                   itemBuilder: (context, index) {
@@ -68,7 +66,7 @@ class _AutismTestPageState extends State<AutismTestPage> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8.w),
                           child: Text(
-                            "Q${index+1}. ${autismQuestions[index]}",
+                            "Q${index+1}. ${_autismQuestions[index]}",
                             style: GoogleFonts.poppins(
                               textStyle: TextStyle(
                                 fontSize: 24.sp,
@@ -89,14 +87,14 @@ class _AutismTestPageState extends State<AutismTestPage> {
                             ),
                           ),
                           onPressed: () {
-                            if(answers[index]){
-                              autismPercent += 5;
+                            if(_answers[index]){
+                              _autismPercent += 5;
                             }
                             else{
-                              autismPercent -= 5;
+                              _autismPercent -= 5;
                             }
-                            if (index < autismQuestions.length - 1){
-                              pageController.nextPage(
+                            if (index < _autismQuestions.length - 1){
+                              _pageController.nextPage(
                                 duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeInOut,
                               );
@@ -129,14 +127,14 @@ class _AutismTestPageState extends State<AutismTestPage> {
                             ),
                           ),
                           onPressed: () {
-                            if(!answers[index]){
-                              autismPercent += 5;
+                            if(!_answers[index]){
+                              _autismPercent += 5;
                             }
                             else{
-                              autismPercent -= 5;
+                              _autismPercent -= 5;
                             }
-                            if (index < autismQuestions.length - 1){
-                              pageController.nextPage(
+                            if (index < _autismQuestions.length - 1){
+                              _pageController.nextPage(
                                 duration: const Duration(milliseconds: 500),
                                 curve: Curves.easeInOut,
                               );
@@ -172,7 +170,7 @@ class _AutismTestPageState extends State<AutismTestPage> {
                       Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8.w),
                         child: Text(
-                          'Question ${index+1} of 20',
+                          'Question ${_index+1} of 20',
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
                               fontSize: 20.sp,
@@ -185,7 +183,7 @@ class _AutismTestPageState extends State<AutismTestPage> {
                       ),
                       Container(
                         height: 6.h,
-                        width: index * 0.0526315789473684 * 450.w,
+                        width: _index * 0.0526315789473684 * 450.w,
                         color: Colors.green,
                       )
                     ],
@@ -204,7 +202,7 @@ class _AutismTestPageState extends State<AutismTestPage> {
       height: 780.h,
       width: 450.w,
       color: Colors.white,
-      child: autismPercent > 60? Column(
+      child: _autismPercent > 60? Column(
         children: [
           SizedBox(height: 40.h,),
           Text(
@@ -387,7 +385,7 @@ class _AutismTestPageState extends State<AutismTestPage> {
           ),
           SizedBox(height: 12.h,),
           Text(
-            'You don\'t need to worry; it is a suspicion, and your child may be fine. However, the results should not be ignored.\nWe recommend seeking professional advice for a comprehensive evaluation. Early intervention makes a positive impact. Support is available for you.',
+            'You don\'t need to worry, it is just a suspicion, and your child may be fine. However, the results should not be ignored.\nWe recommend seeking professional advice for a comprehensive evaluation. Early intervention makes a positive impact.',
             style: GoogleFonts.poppins(
               textStyle: TextStyle(
                 fontSize: 20.sp,

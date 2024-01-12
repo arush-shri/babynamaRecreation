@@ -16,19 +16,19 @@ class VaccinePage extends StatefulWidget {
 
 class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin {
 
-  bool allVaccineVisible = false;
-  bool dueVaccineVisible = false;
-  bool upcomingVaccineVisible = true;
-  bool takenVaccineVisible = false;
+  bool _allVaccineVisible = false;
+  bool _dueVaccineVisible = false;
+  bool _upcomingVaccineVisible = true;
+  bool _takenVaccineVisible = false;
 
   late AnimationController _arrowAnimationController1;
   late AnimationController _arrowAnimationController2;
   late AnimationController _arrowAnimationController3;
   late AnimationController _arrowAnimationController4;
 
-  Map<int, Map<String, dynamic>> dueVaccineData = {};
-  Map<int, Map<String, dynamic>> upcomingVaccineData ={};
-  Map<int, Map<String, dynamic>> takenVaccineData = {};
+  Map<int, Map<String, dynamic>> _dueVaccineData = {};
+  Map<int, Map<String, dynamic>> _upcomingVaccineData ={};
+  Map<int, Map<String, dynamic>> _takenVaccineData = {};
   final List<String> _reasonsToVaccinate = [
     "Vaccinations provide essential protection against serious and potentially life-threatening diseases such as measles, mumps, rubella, and whooping cough.",
     "Early vaccination helps develop a strong and resilient immune system in newborns.",
@@ -42,9 +42,9 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
     "Supporting global health efforts for the eradication of specific diseases through vaccination programs.",
   ];
 
-  late String vaccineImportance;
+  late String _vaccineImportance;
 
-  final DateTime DOB = DateTime.parse("2023-12-01");
+  final DateTime DOB = DateTime.now().subtract(const Duration(days: 40));
 
   @override
   void initState() {
@@ -144,19 +144,19 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
             }
           });
           if(tmp1.isNotEmpty){
-            dueVaccineData[index] = {
+            _dueVaccineData[index] = {
               'question': currQue,
               'choices': tmp1,
             };
           }
           if(tmp2.isNotEmpty){
-            upcomingVaccineData[index] = {
+            _upcomingVaccineData[index] = {
               'question': currQue,
               'choices': tmp2,
             };
           }
           if(tmp3.isNotEmpty){
-            takenVaccineData[index] = {
+            _takenVaccineData[index] = {
               'question': currQue,
               'choices': tmp3,
             };
@@ -168,21 +168,12 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
       });
       index++;
     }
-    print(dueVaccineData);
-    print(takenVaccineData);
   }
 
   @override
   Widget build(BuildContext context) {
-    vaccineImportance = _reasonsToVaccinate[Random().nextInt(10)];
-    return PopScope(
-      canPop: true,
-      onPopInvoked: (bool it){
-        if(it){
-          FileHandler().storeFile(widget.vaccineData);
-        }
-      },
-      child: ScreenUtilInit(
+    _vaccineImportance = _reasonsToVaccinate[Random().nextInt(10)];
+    return ScreenUtilInit(
         designSize: const Size(450, 800),
         builder: (context, child){
           return Scaffold(
@@ -223,11 +214,11 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                       SizedBox(height: 16.h),
 
                       dropDownWidget("Upcoming Doses", _arrowAnimationController1, Colors.yellow, (){
-                        upcomingVaccineVisible = !upcomingVaccineVisible;
+                        _upcomingVaccineVisible = !_upcomingVaccineVisible;
                       }),
                       SizeTransition(
                         sizeFactor: _arrowAnimationController1,
-                        child: upcomingVaccineData.isEmpty? Text("No Upcoming Doses This Week",
+                        child: _upcomingVaccineData.isEmpty? Text("No Upcoming Doses This Week",
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
                               fontSize: 22.sp,
@@ -236,7 +227,7 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                             ),
                           ),
                         ) : Column(
-                          children: upcomingVaccineData.entries.map((data) {
+                          children: _upcomingVaccineData.entries.map((data) {
                             int index = data.key;
                             return vaccineCard(
                                 data.value['question'],
@@ -254,11 +245,11 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                       ),
 
                       dropDownWidget("Due Vaccines", _arrowAnimationController2, Colors.red, (){
-                        dueVaccineVisible = !dueVaccineVisible;
+                        _dueVaccineVisible = !_dueVaccineVisible;
                       }),
                       SizeTransition(
                         sizeFactor: _arrowAnimationController2,
-                        child: dueVaccineData.isEmpty? Text("No Due Vaccine Doses",
+                        child: _dueVaccineData.isEmpty? Text("No Due Vaccine Doses",
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
                               fontSize: 22.sp,
@@ -267,7 +258,7 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                             ),
                           ),
                         ) : Column(
-                          children: dueVaccineData.entries.map((data) {
+                          children: _dueVaccineData.entries.map((data) {
                             int index = data.key;
                             return vaccineCard(
                                 data.value['question'],
@@ -285,11 +276,11 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                       ),
 
                       dropDownWidget("Taken Doses", _arrowAnimationController3, const Color(0xFF0DC626), (){
-                        takenVaccineVisible = !takenVaccineVisible;
+                        _takenVaccineVisible = !_takenVaccineVisible;
                       }),
                       SizeTransition(
                           sizeFactor: _arrowAnimationController3,
-                        child: takenVaccineData.isEmpty? Text("No Vaccines Taken Yet",
+                        child: _takenVaccineData.isEmpty? Text("No Vaccines Taken Yet",
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
                               fontSize: 22.sp,
@@ -298,7 +289,7 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                             ),
                           ),
                         ) : Column(
-                          children: takenVaccineData.entries.map((data) {
+                          children: _takenVaccineData.entries.map((data) {
                             int index = data.key;
                             return vaccineCard(
                                 data.value['question'],
@@ -316,7 +307,7 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                       ),
 
                       dropDownWidget("All Vaccine Status", _arrowAnimationController4, Colors.blue, (){
-                        allVaccineVisible = !allVaccineVisible;
+                        _allVaccineVisible = !_allVaccineVisible;
                       }),
                       SizeTransition(
                         sizeFactor: _arrowAnimationController4,
@@ -355,7 +346,7 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                         ),
                         textAlign: TextAlign.left,
                       ),
-                      Text(vaccineImportance,
+                      Text(_vaccineImportance,
                         style: GoogleFonts.poppins(
                           textStyle: TextStyle(
                             fontSize: 20.sp,
@@ -372,8 +363,7 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
             ),
           );
         },
-      ),
-    );
+      );
   }
 
   Widget dropDownWidget(String data, AnimationController arrowAnimController, Color colorPrimary, Function callback){
@@ -466,19 +456,19 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                     if (!entry.value) {
                       widget.vaccineData[index]['choices'][entry.key] = true;
                       if(doseDue == "U"){
-                        upcomingVaccineData[index]?['choices'][entry.key] = true;
-                        upcomingVaccineData.remove(index);
+                        _upcomingVaccineData[index]?['choices'][entry.key] = true;
+                        _upcomingVaccineData.remove(index);
                       }
                       if(doseDue == "D"){
-                        dueVaccineData[index]?['choices'][entry.key] = true;
-                        dueVaccineData.remove(index);
+                        _dueVaccineData[index]?['choices'][entry.key] = true;
+                        _dueVaccineData.remove(index);
                       }
                       if(doseDue == "T"){
-                        takenVaccineData[index]?['choices'][entry.key] = true;
-                        takenVaccineData.remove(index);
+                        _takenVaccineData[index]?['choices'][entry.key] = true;
+                        _takenVaccineData.remove(index);
                       }
                     }
-                    loadMapData();
+                    FileHandler().storeFile(widget.vaccineData);
                   });
                 },
               ),
