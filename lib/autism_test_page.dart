@@ -40,155 +40,248 @@ class _AutismTestPageState extends State<AutismTestPage> {
   double autismPercent = 0.0;
   int index = 0;
   PageController pageController = PageController();
+  bool _showResult = false;
 
   @override
   Widget build(BuildContext context) {
-    Color randomColor = generateRandomColor();
 
     return ScreenUtilInit(
       designSize: const Size(450,800),
       builder: (context, child){
         return Scaffold(
-          body: Stack(
-            children: [
-              PageView.builder(
-                controller: pageController,
-                itemCount: autismQuestions.length,
-                onPageChanged: (int page) {
-                  setState(() {
-                    index = page;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+          body: SafeArea(
+            child: _showResult? _showResultScreen() : Stack(
+              children: [
+                Text(
+                  "This test is recommended by WHO & American Academy of Pediatrics",
+                  style: GoogleFonts.poppins(
+                    textStyle: TextStyle(
+                      fontSize: 20.sp,
+                      color: const Color(0xFFA8A8A8),
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                PageView.builder(
+                  controller: pageController,
+                  itemCount: autismQuestions.length,
+                  onPageChanged: (int page) {
+                    setState(() {
+                      index = page;
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          child: Text(
+                            "Q${index+1}. ${autismQuestions[index]}",
+                            style: GoogleFonts.poppins(
+                              textStyle: TextStyle(
+                                fontSize: 24.sp,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: 40.h),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            fixedSize: Size(140.w, 30.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14.w),
+                            ),
+                          ),
+                          onPressed: () {
+                            if(answers[index]){
+                              autismPercent += 5;
+                            }
+                            else{
+                              autismPercent -= 5;
+                            }
+                            if (index < autismQuestions.length - 1){
+                              pageController.nextPage(
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
+                            }
+                            if(index == 19){
+                              setState(() {
+                                _showResult = true;
+                              });
+                            }
+                          },
+                          child: Text(
+                            'YES',
+                            style: GoogleFonts.poppins(
+                              textStyle: TextStyle(
+                                fontSize: 26.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: 15.h),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            fixedSize: Size(100.w, 30.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14.w),
+                            ),
+                          ),
+                          onPressed: () {
+                            if(!answers[index]){
+                              autismPercent += 5;
+                            }
+                            else{
+                              autismPercent -= 5;
+                            }
+                            if (index < autismQuestions.length - 1){
+                              pageController.nextPage(
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
+                            }
+                            if(index == 19){
+                              setState(() {
+                                _showResult = true;
+                              });
+                            }
+                          },
+                          child: Text(
+                            'NO',
+                            style: GoogleFonts.poppins(
+                              textStyle: TextStyle(
+                                fontSize: 26.sp,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
+                          padding: EdgeInsets.symmetric(horizontal: 8.w),
                         child: Text(
-                          "Q${index+1}. ${autismQuestions[index]}",
+                          'Question ${index+1} of 20',
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
-                              fontSize: 24.sp,
-                              color: randomColor,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(height: 40.h),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          fixedSize: Size(140.w, 30.h),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14.w),
-                          ),
-                        ),
-                        onPressed: () {
-                          if(!answers[index]){
-                            autismPercent += 5;
-                          }
-                          if (index < autismQuestions.length - 1){
-                            pageController.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                          randomColor = generateRandomColor();
-                        },
-                        child: Text(
-                          'YES',
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                              fontSize: 26.sp,
-                              color: Colors.white,
+                              fontSize: 20.sp,
+                              color: Colors.blueGrey,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      SizedBox(height: 15.h),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          fixedSize: Size(100.w, 30.h),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14.w),
-                          ),
-                        ),
-                        onPressed: () {
-                          if(answers[index]){
-                            autismPercent += 5;
-                          }
-                          if (index < autismQuestions.length - 1){
-                            pageController.nextPage(
-                              duration: const Duration(milliseconds: 500),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                          randomColor = generateRandomColor();
-                        },
-                        child: Text(
-                          'NO',
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                              fontSize: 26.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                      Container(
+                        height: 6.h,
+                        width: index * 0.0526315789473684 * 450.w,
+                        color: Colors.green,
+                      )
                     ],
-                  );
-                },
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                      child: Text(
-                        'Question ${index+1} of 20',
-                        style: GoogleFonts.poppins(
-                          textStyle: TextStyle(
-                            fontSize: 20.sp,
-                            color: Colors.blueGrey,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    Container(
-                      height: 6.h,
-                      width: index * 0.0526315789473684 * 450.w,
-                      color: Colors.green,
-                    )
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
     );
-
   }
 
-  Color generateRandomColor() {
-    final random = Random();
-    final int red = 50 + random.nextInt(100);
-    final int green = 50 + random.nextInt(100);
-    final int blue = 50 + random.nextInt(100);
-
-    return Color.fromRGBO(red, green, blue, 1.0);
+  Widget _showResultScreen(){
+    return Container(
+      height: 780.h,
+      width: 450.w,
+      color: Colors.white,
+      child: autismPercent > 60? Column(
+        children: [
+          SizedBox(height: 40.h,),
+          Text(
+            'Your child is fine, nothing to worry',
+            style: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontSize: 24.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 12.h,),
+          Card(
+            color: const Color(0xFF64EC1D),
+            elevation: 6.h,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 16.h),
+              child: Text(
+                'Screen again after the next birthday.\nNo further action required unless screening indicates risk for Autism',
+                style: GoogleFonts.poppins(
+                  textStyle: TextStyle(
+                    fontSize: 20.sp,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      ) : Column(
+        children: [
+          Text(
+            'Your child is at risk, please consult',
+            style: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontSize: 24.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 12.h,),
+          Card(
+            color: Colors.redAccent,
+            elevation: 6.h,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 16.h),
+              child: Text(
+                'The screening test for autism is positive. To confirm the diagnosis book a consultation with us or go to nearby pediatric neurologist',
+                style: GoogleFonts.poppins(
+                  textStyle: TextStyle(
+                    fontSize: 20.sp,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
