@@ -216,9 +216,17 @@ class _AutismTestPageState extends State<AutismTestPage> {
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 12.h,),
+          SizedBox(height: 16.h,),
+          CircleAvatar(
+            radius: 100.w,
+            backgroundColor: Colors.indigoAccent,
+            backgroundImage: const AssetImage(
+              "images/testok.jpg",
+            ),
+          ),
+          SizedBox(height: 20.h,),
           Card(
-            color: const Color(0xFF64EC1D),
+            color: const Color(0xff4bdc23),
             elevation: 6.h,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 16.h),
@@ -250,7 +258,15 @@ class _AutismTestPageState extends State<AutismTestPage> {
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 12.h,),
+          SizedBox(height: 16.h,),
+          CircleAvatar(
+            radius: 100.w,
+            backgroundColor: Colors.indigoAccent,
+            backgroundImage: const AssetImage(
+              "images/testfail.jpg",
+            ),
+          ),
+          SizedBox(height: 20.h,),
           Card(
             color: Colors.redAccent,
             elevation: 6.h,
@@ -323,23 +339,57 @@ class _AutismTestPageState extends State<AutismTestPage> {
             ),
             textAlign: TextAlign.justify,
           ),
-          SizedBox(height: 20.h,),
+          SizedBox(height: 10.h,),
+          Divider(
+            thickness: 1.w,
+            color: Colors.black54,
+          ),
+          SizedBox(height: 16.h,),
           Text(
-            'The test consists of 20 yes-no questions based on child\'s behaviour. Please answer all the questions correctly.',
+            'What to do if your child is suspected to have autism ?',
+            style: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontSize: 23.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            textAlign: TextAlign.left,
+          ),
+          SizedBox(height: 12.h,),
+          Text(
+            'You don\'t need to worry, it is just a suspicion, and your child may be fine. However, the results should not be ignored.\nWe recommend seeking professional advice for a comprehensive evaluation. Early intervention makes a positive impact.',
             style: GoogleFonts.poppins(
               textStyle: TextStyle(
                 fontSize: 20.sp,
-                color: Colors.black87,
+                color: Colors.black,
                 fontWeight: FontWeight.w500,
               ),
             ),
             textAlign: TextAlign.justify,
           ),
           SizedBox(height: 20.h,),
+          Divider(
+            thickness: 1.w,
+            color: Colors.black54,
+          ),
+          SizedBox(height: 20.h,),
+          Text(
+            'The test consists of 20 yes-no questions based on child\'s behaviour. Please answer all the questions correctly.',
+            style: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontSize: 20.sp,
+                color: const Color(0xff6a03c5),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            textAlign: TextAlign.justify,
+          ),
+          SizedBox(height: 25.h,),
           Center(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                elevation: 6.h,
+                  elevation: 6.h,
                   backgroundColor: Colors.green,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.w)
@@ -365,35 +415,6 @@ class _AutismTestPageState extends State<AutismTestPage> {
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 20.h,),
-          Divider(
-            thickness: 1.w,
-            color: Colors.black54,
-          ),
-          SizedBox(height: 20.h,),
-          Text(
-            'What to do if your child is suspected to have autism ?',
-            style: GoogleFonts.poppins(
-              textStyle: TextStyle(
-                fontSize: 23.sp,
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            textAlign: TextAlign.left,
-          ),
-          SizedBox(height: 12.h,),
-          Text(
-            'You don\'t need to worry, it is just a suspicion, and your child may be fine. However, the results should not be ignored.\nWe recommend seeking professional advice for a comprehensive evaluation. Early intervention makes a positive impact.',
-            style: GoogleFonts.poppins(
-              textStyle: TextStyle(
-                fontSize: 20.sp,
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            textAlign: TextAlign.justify,
           ),
         ],
       ),
