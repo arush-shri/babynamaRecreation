@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:babynama/file_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,6 +29,20 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
   Map<int, Map<String, dynamic>> dueVaccineData = {};
   Map<int, Map<String, dynamic>> upcomingVaccineData ={};
   Map<int, Map<String, dynamic>> takenVaccineData = {};
+  final List<String> _reasonsToVaccinate = [
+    "Vaccinations provide essential protection against serious and potentially life-threatening diseases such as measles, mumps, rubella, and whooping cough.",
+    "Early vaccination helps develop a strong and resilient immune system in newborns.",
+    "Preventing the spread of infectious diseases within communities.",
+    "Vaccination reduces the risk of complications and severe outcomes from preventable illnesses.",
+    "Creating immunity during the vulnerable period when the risk of disease is high.",
+    "Contributing to community immunity (herd immunity) by protecting those who cannot be vaccinated.",
+    "Guarding against outbreaks of preventable diseases in the population.",
+    "Ensuring a healthy start in life by providing protection against harmful infections.",
+    "Reducing the risk of long-term disabilities caused by certain diseases.",
+    "Supporting global health efforts for the eradication of specific diseases through vaccination programs.",
+  ];
+
+  late String vaccineImportance;
 
   final DateTime DOB = DateTime.parse("2023-12-01");
 
@@ -34,10 +50,11 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
   void initState() {
     super.initState();
     loadMapData();
-    _arrowAnimationController1 = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
-    _arrowAnimationController2 = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
-    _arrowAnimationController3 = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
-    _arrowAnimationController4 = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+    _arrowAnimationController1 = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
+    _arrowAnimationController2 = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
+    _arrowAnimationController3 = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
+    _arrowAnimationController4 = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
+    _arrowAnimationController1.forward();
   }
 
   bool isVaccineUpcoming(String fullDuration){
@@ -60,6 +77,28 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
       DateTime newDate = DOB.add(Duration(days: duration.toInt()*365));
       DateTime nextWeek = DateTime.now().add(const Duration(days: 7));
       return newDate.isBefore(nextWeek) && newDate.isAfter(DateTime.now());
+    }
+    return false;
+  }
+
+  bool isVaccineDue(String fullDuration){
+
+    List <String> durationList = fullDuration.split(':');
+    double duration = double.parse(durationList[1].substring(0, durationList[1].length - 1));
+    String durationType = durationList[1][durationList[1].length-1];
+    DateTime today = DateTime.now();
+
+    if(durationType == "w"){
+      DateTime newDate = DOB.add(Duration(days: duration.toInt()*7));
+      return newDate.isBefore(today);
+    }
+    if(durationType == "m"){
+      DateTime newDate = DOB.add(Duration(days: duration.toInt()*30));
+      return newDate.isBefore(today);
+    }
+    if(durationType == "y"){
+      DateTime newDate = DOB.add(Duration(days: duration.toInt()*365));
+      return newDate.isBefore(today);
     }
     return false;
   }
@@ -97,10 +136,9 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
             if(value2){
               tmp3[key2] = value2;
             }
-            else {
+            if(isVaccineDue(key2) && !value2) {
               tmp1[key2] = value2;
             }
-            print("$currQue $key2");
             if(isVaccineUpcoming(key2) && !value2){
               tmp2[key2] = value2;
             }
@@ -136,7 +174,7 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-
+    vaccineImportance = _reasonsToVaccinate[Random().nextInt(10)];
     return PopScope(
       canPop: true,
       onPopInvoked: (bool it){
@@ -187,8 +225,8 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                       dropDownWidget("Upcoming Doses", _arrowAnimationController1, Colors.yellow, (){
                         upcomingVaccineVisible = !upcomingVaccineVisible;
                       }),
-                      Visibility(
-                        visible: upcomingVaccineVisible,
+                      SizeTransition(
+                        sizeFactor: _arrowAnimationController1,
                         child: upcomingVaccineData.isEmpty? Text("No Upcoming Doses This Week",
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
@@ -210,12 +248,16 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                           }).toList(),
                         ),
                       ),
+                      Divider(
+                        thickness: 1.w,
+                        color: Colors.blueGrey,
+                      ),
 
                       dropDownWidget("Due Vaccines", _arrowAnimationController2, Colors.red, (){
                         dueVaccineVisible = !dueVaccineVisible;
                       }),
-                      Visibility(
-                        visible: dueVaccineVisible,
+                      SizeTransition(
+                        sizeFactor: _arrowAnimationController2,
                         child: dueVaccineData.isEmpty? Text("No Due Vaccine Doses",
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
@@ -237,12 +279,16 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                           }).toList(),
                         ),
                       ),
+                      Divider(
+                        thickness: 1.w,
+                        color: Colors.blueGrey,
+                      ),
 
                       dropDownWidget("Taken Doses", _arrowAnimationController3, const Color(0xFF0DC626), (){
                         takenVaccineVisible = !takenVaccineVisible;
                       }),
-                      Visibility(
-                        visible: takenVaccineVisible,
+                      SizeTransition(
+                          sizeFactor: _arrowAnimationController3,
                         child: takenVaccineData.isEmpty? Text("No Vaccines Taken Yet",
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
@@ -264,12 +310,16 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                           }).toList(),
                         ),
                       ),
+                      Divider(
+                        thickness: 1.w,
+                        color: Colors.blueGrey,
+                      ),
 
                       dropDownWidget("All Vaccine Status", _arrowAnimationController4, Colors.blue, (){
                         allVaccineVisible = !allVaccineVisible;
                       }),
-                      Visibility(
-                        visible: allVaccineVisible,
+                      SizeTransition(
+                        sizeFactor: _arrowAnimationController4,
                         child: Column(
                           children: widget.vaccineData.asMap().entries.map((data) {
                             int index = data.key;
@@ -282,6 +332,37 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                             );
                           }).toList(),
                         ),
+                      ),
+                      Divider(
+                        thickness: 1.w,
+                        color: Colors.blueGrey,
+                      ),
+                      SizedBox(height: 10.h,),
+                      Center(
+                        child: Image.asset(
+                          "images/vaccination.jpg",
+                          height: 200.h,
+                        ),
+                      ),
+                      Text("Why vaccinate your child ?",
+                        style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                            fontSize: 22.sp,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(vaccineImportance,
+                        style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                            fontSize: 20.sp,
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        textAlign: TextAlign.left,
                       ),
                     ],
                   ),
@@ -296,7 +377,7 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
 
   Widget dropDownWidget(String data, AnimationController arrowAnimController, Color colorPrimary, Function callback){
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: InkWell(
         onTap: (){
           setState(() {
@@ -306,24 +387,26 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
             callback();
           });
         },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(data,
-              style: GoogleFonts.poppins(
-                textStyle: TextStyle(
-                  fontSize: 22.sp,
-                  color: colorPrimary,
-                  fontWeight: FontWeight.w500,
+        child: SizedBox(
+          height: 40.h,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(data,
+                style: GoogleFonts.poppins(
+                  textStyle: TextStyle(
+                    fontSize: 22.sp,
+                    color: colorPrimary,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-            ),
-            RotationTransition(
-              turns: Tween(begin: 0.0, end: 0.5).animate(arrowAnimController),
-              child: data[0]=='U'? Icon(Icons.keyboard_arrow_up_sharp, size: 24.h, color: colorPrimary)
-                  : Icon(Icons.keyboard_arrow_down_sharp, size: 24.h, color: colorPrimary),
-            ),
-          ],
+              RotationTransition(
+                turns: Tween(begin: 0.0, end: 0.5).animate(arrowAnimController),
+                child: Icon(Icons.keyboard_arrow_down_sharp, size: 26.h, color: colorPrimary),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -364,7 +447,7 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                         ),
                       ),
                     ),
-                    doseDue=="U"? Text(
+                    doseDue=="U" || doseDue=="D"? Text(
                       " (${dueDate(entry.key)})",
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
