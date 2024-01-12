@@ -41,6 +41,7 @@ class _AutismTestPageState extends State<AutismTestPage> {
   int index = 0;
   PageController pageController = PageController();
   bool _showResult = false;
+  bool _showWelcomePage = true;
 
   @override
   Widget build(BuildContext context) {
@@ -50,19 +51,8 @@ class _AutismTestPageState extends State<AutismTestPage> {
       builder: (context, child){
         return Scaffold(
           body: SafeArea(
-            child: _showResult? _showResultScreen() : Stack(
+            child:  _showWelcomePage? _welcomePage() : _showResult? _showResultScreen() : Stack(
               children: [
-                Text(
-                  "This test is recommended by WHO & American Academy of Pediatrics",
-                  style: GoogleFonts.poppins(
-                    textStyle: TextStyle(
-                      fontSize: 20.sp,
-                      color: const Color(0xFFA8A8A8),
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
                 PageView.builder(
                   controller: pageController,
                   itemCount: autismQuestions.length,
@@ -250,6 +240,7 @@ class _AutismTestPageState extends State<AutismTestPage> {
         ],
       ) : Column(
         children: [
+          SizedBox(height: 40.h,),
           Text(
             'Your child is at risk, please consult',
             style: GoogleFonts.poppins(
@@ -279,6 +270,132 @@ class _AutismTestPageState extends State<AutismTestPage> {
                 textAlign: TextAlign.center,
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _welcomePage(){
+    return Container(
+      height: 780.h,
+      width: 450.w,
+      color: Colors.white,
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 30.h,),
+          Center(
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(
+                      Icons.arrow_back_sharp,
+                    size: 36.w,
+                  ),
+                ),
+                SizedBox(width: 12.w,),
+                Text(
+                  'Welcome to Autism Test',
+                  style: GoogleFonts.poppins(
+                    textStyle: TextStyle(
+                      fontSize: 28.sp,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20.h,),
+          Text(
+            'This test is recommended by WHO & American Academy of Pediatrics for child 18 months or older.',
+            style: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontSize: 20.sp,
+                color: const Color(0xFF818181),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            textAlign: TextAlign.justify,
+          ),
+          SizedBox(height: 20.h,),
+          Text(
+            'The test consists of 20 yes-no questions based on child\'s behaviour. Please answer all the questions correctly.',
+            style: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontSize: 20.sp,
+                color: Colors.black87,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            textAlign: TextAlign.justify,
+          ),
+          SizedBox(height: 20.h,),
+          Center(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 6.h,
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.w)
+                  )
+              ),
+              onPressed: (){
+                setState(() {
+                  _showWelcomePage = false;
+                });
+              },
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+                child: Text(
+                  'START',
+                  style: GoogleFonts.poppins(
+                    textStyle: TextStyle(
+                      fontSize: 28.sp,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 20.h,),
+          Divider(
+            thickness: 1.w,
+            color: Colors.black54,
+          ),
+          SizedBox(height: 20.h,),
+          Text(
+            'What to do if your child is suspected to have autism ?',
+            style: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontSize: 23.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            textAlign: TextAlign.left,
+          ),
+          SizedBox(height: 12.h,),
+          Text(
+            'You don\'t need to worry; it is a suspicion, and your child may be fine. However, the results should not be ignored.\nWe recommend seeking professional advice for a comprehensive evaluation. Early intervention makes a positive impact. Support is available for you.',
+            style: GoogleFonts.poppins(
+              textStyle: TextStyle(
+                fontSize: 20.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            textAlign: TextAlign.justify,
           ),
         ],
       ),

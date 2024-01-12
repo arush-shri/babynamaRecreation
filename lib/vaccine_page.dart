@@ -344,6 +344,7 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                           height: 200.h,
                         ),
                       ),
+                      SizedBox(height: 16.h,),
                       Text("Why vaccinate your child ?",
                         style: GoogleFonts.poppins(
                           textStyle: TextStyle(
