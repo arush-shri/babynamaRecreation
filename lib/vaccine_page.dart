@@ -55,6 +55,7 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
     _arrowAnimationController3 = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
     _arrowAnimationController4 = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
     _arrowAnimationController1.forward();
+    _vaccineImportance = _reasonsToVaccinate[Random().nextInt(10)];
   }
 
   bool isVaccineUpcoming(String fullDuration){
@@ -172,7 +173,6 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    _vaccineImportance = _reasonsToVaccinate[Random().nextInt(10)];
     return ScreenUtilInit(
         designSize: const Size(450, 800),
         builder: (context, child){
@@ -346,7 +346,8 @@ class _VaccinePageState extends State<VaccinePage> with TickerProviderStateMixin
                         ),
                         textAlign: TextAlign.left,
                       ),
-                      Text(_vaccineImportance,
+                      Text(
+                        _vaccineImportance,
                         style: GoogleFonts.poppins(
                           textStyle: TextStyle(
                             fontSize: 20.sp,

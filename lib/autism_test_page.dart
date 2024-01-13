@@ -95,7 +95,7 @@ class _AutismTestPageState extends State<AutismTestPage> {
                             "Q${index+1}. ${_autismQuestions[index]}",
                             style: GoogleFonts.poppins(
                               textStyle: TextStyle(
-                                fontSize: 25.sp,
+                                fontSize: 24.sp,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -235,6 +235,33 @@ class _AutismTestPageState extends State<AutismTestPage> {
       color: Colors.white,
       child: _autismPercent > 60? Column(
         children: [
+          SizedBox(height: 10.h,),
+          Row(
+            children: [
+              SizedBox(width: 8.w,),
+              GestureDetector(
+                onTap: (){
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.arrow_back_sharp,
+                  size: 36.w,
+                ),
+              ),
+              SizedBox(width: 12.w,),
+              Text(
+                'Test Results',
+                style: GoogleFonts.poppins(
+                  textStyle: TextStyle(
+                    fontSize: 28.sp,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
           SizedBox(height: 40.h,),
           Text(
             'Your child is fine, nothing to worry',
@@ -277,6 +304,33 @@ class _AutismTestPageState extends State<AutismTestPage> {
         ],
       ) : Column(
         children: [
+          SizedBox(height: 10.h,),
+          Row(
+            children: [
+              SizedBox(width: 8.w,),
+              GestureDetector(
+                onTap: (){
+                  Navigator.of(context).pop();
+                },
+                child: Icon(
+                  Icons.arrow_back_sharp,
+                  size: 36.w,
+                ),
+              ),
+              SizedBox(width: 12.w,),
+              Text(
+                'Test Results',
+                style: GoogleFonts.poppins(
+                  textStyle: TextStyle(
+                    fontSize: 28.sp,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
           SizedBox(height: 40.h,),
           Text(
             'Your child is at risk, please consult',

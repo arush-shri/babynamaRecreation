@@ -4,10 +4,6 @@ import 'package:path_provider/path_provider.dart';
 
 class FileHandler{
 
-  FileHandler(){
-    createFile();
-  }
-
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
     return directory.path;
@@ -23,7 +19,7 @@ class FileHandler{
     return File('$path/childGrowthTTT.json');
   }
 
-  Future<void> createFile() async {
+  Future<bool> createFile() async {
     File file = await _localFile;
 
     if (!await file.exists()) {
@@ -144,16 +140,16 @@ class FileHandler{
           'choices': {'Dose-1: 12m': false, 'Dose-2 : 13m': false},
         },
       ];
-      print(questionsChoices);
       await file.create(recursive: true);
       await file.writeAsString(jsonEncode(questionsChoices));
     }
+    return true;
   }
 
   Future<List<Map<String, dynamic>>> readFile() async {
     try {
       File file = await _localFile;
-      if (await file.exists()) {
+      if (await createFile()) {
         String contents = await file.readAsString();
         List<dynamic> jsonData = jsonDecode(contents);
         if (jsonData.every((element) => element is Map<String, dynamic>)) {
@@ -162,7 +158,6 @@ class FileHandler{
       }
       return [];
     } catch (e) {
-      print('Error reading file: $e');
       return [];
     }
   }
@@ -179,8 +174,6 @@ class FileHandler{
       "height" : height,
       "weight" : weight
     };
-    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-    print(data);
     await file.writeAsString(jsonEncode(data), mode: FileMode.append);
   }
 

@@ -1,7 +1,6 @@
 import 'package:babynama/file_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -139,8 +138,10 @@ class _TrackGrowthPageState extends State<TrackGrowthPage> {
                             context: context,
                             builder: (BuildContext builder) {
                               return AlertDialog(
+                                insetPadding: EdgeInsets.all(10.w),
                                 content: SizedBox(
                                   height: 200.h,
+                                  width: 350.w,
                                   child: CupertinoDatePicker(
                                     mode: CupertinoDatePickerMode.date,
                                     initialDateTime: selectedDate,
@@ -271,8 +272,9 @@ class _TrackGrowthPageState extends State<TrackGrowthPage> {
                         ),
                         fixedSize: Size(200.w, 60.h)
                       ),
-                        onPressed: (){
-                        FileHandler().storeGrowthFile(datePicked, height, weight);
+                        onPressed: () async {
+                          FileHandler().storeGrowthFile(datePicked, height, weight);
+                          growtHistory = await FileHandler().getGrowthData();
                         },
                         child: Text(
                           'Save Data',
